@@ -38,13 +38,13 @@ public class RegistrationService {
     }
 
     @Transactional
-    public Attendance addUserToEvent(Long eventId, Long userId) {
+    public Attendance addUserToEvent(Long eventId, String userId) {
 
         if (attendanceRepository.existsByUserIdAndEventId(userId, eventId)) 
-            new ResourceNotFoundException("Ya existe ");
+            throw new ResourceNotFoundException("The user is already registered in the event");
 
         Event event = eventRepo.findById(eventId)
-                     .orElseThrow(() -> new ResourceNotFoundException("Evento "+eventId));
+                     .orElseThrow(() -> new ResourceNotFoundException("The event doesn´t exist with the eventId: "+eventId));
 
         Attendance attendee = new Attendance();
         attendee.setEvent(event);

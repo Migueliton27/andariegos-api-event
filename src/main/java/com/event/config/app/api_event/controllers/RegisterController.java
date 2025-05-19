@@ -40,12 +40,12 @@ public class RegisterController {
 
     @PostMapping
     public ResponseEntity<?> addUserToEvent(@Valid @RequestBody() CreateAttendeeDto attendance){
-        Long userId = attendance.getUserId();
+        String userId = attendance.getUserId();
         Long eventId = attendance.getEventId();
 
         Attendance newAttendance = service.addUserToEvent(
-            userId,
-            eventId
+            eventId,
+            userId
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newAttendance);

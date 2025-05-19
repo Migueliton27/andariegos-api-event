@@ -8,7 +8,7 @@ import com.event.config.app.api_event.model.Event;
 import com.event.config.app.api_event.model.Attendance;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
-    boolean existsByUserIdAndEventId(Long userId, Long eventId);
+    boolean existsByUserIdAndEventId(String userId, Long eventId);
 
     List<Attendance> findByEventId(Long eventId);
 }

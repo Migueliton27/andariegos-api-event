@@ -11,5 +11,5 @@ public class AttendeeDto {
     @Getter 
     Long attendanceId;
     @Getter 
-    Long userId;
+    String userId;
 }
