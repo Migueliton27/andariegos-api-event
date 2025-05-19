@@ -19,7 +19,7 @@ public class EventService {
         return eventRepository.findAll();
     }
 
-    public Event getEventById(String id) {
+    public Event getEventById(Long id) {
         return eventRepository.findById(id).orElse(null);
     }
 
@@ -27,7 +27,7 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public void deleteEvent(String id) {
+    public void deleteEvent(Long id) {
         eventRepository.deleteById(id);
     }
 }

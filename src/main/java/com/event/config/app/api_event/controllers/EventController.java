@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.event.config.app.api_event.dto.CreateEventDto;
+import com.event.config.app.api_event.dto.UpdateEventDto;
 import com.event.config.app.api_event.exceptions.ResourceNotFoundException;
 import com.event.config.app.api_event.mapper.EventMapper;
 import com.event.config.app.api_event.model.Event;
@@ -41,7 +42,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getEvent(@PathVariable String id) throws ResourceNotFoundException {
+    public ResponseEntity<?> getEvent(@PathVariable Long id) throws ResourceNotFoundException {
         Event event = this.service.getEventById(id);
         if (event == null) {
             throw new ResourceNotFoundException("No event found with the code: " + id);
@@ -56,8 +57,21 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
     }
 
-    @PutMapping
-    public ResponseEntity<?> putEvent(@RequestBody() Event event){
-        return null;
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateEvent(
+        @PathVariable Long id,
+        @Valid @RequestBody UpdateEventDto dto
+    ) throws ResourceNotFoundException {
+
+        Event existing = this.service.getEventById(id);
+        if (existing == null) {
+            throw new ResourceNotFoundException("No event found with the code: " + id);
+        }
+
+        mapper.updateEntity(existing, dto);
+
+        Event updated = service.saveEvent(existing);
+
+        return ResponseEntity.ok(mapper.toDto(updated));
     }
 }

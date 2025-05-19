@@ -3,17 +3,19 @@ package com.event.config.app.api_event.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "Event")
+@Table(name = "event")
 public class Event {
 
     @Id
     @Column(name = "id_event")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idEvent;
+    private Long id;
 
     private String name;
 
@@ -36,12 +38,15 @@ public class Event {
 
     private String image3;
 
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Attendance> attendances = new HashSet<>();
+
     public Event() {
     }
 
     public Event(Long idEvent, String name, String description, LocalDateTime date, String city, String address,
                  Integer availableSpots, BigDecimal price, String image1, String image2, String image3) {
-        this.idEvent = idEvent;
+        this.id = idEvent;
         this.name = name;
         this.description = description;
         this.date = date;
@@ -55,11 +60,11 @@ public class Event {
     }
 
     public Long getIdEvent() {
-        return idEvent;
+        return id;
     }
 
     public void setIdEvent(Long idEvent) {
-        this.idEvent = idEvent;
+        this.id = idEvent;
     }
 
     public String getName() {
