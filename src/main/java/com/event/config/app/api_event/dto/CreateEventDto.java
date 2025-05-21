@@ -3,6 +3,7 @@ package com.event.config.app.api_event.dto;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.event.config.app.api_event.model.Event;
@@ -25,7 +26,7 @@ public class CreateEventDto {
   private String description;
 
   @NotNull(message = "Date is required")
-  private LocalDateTime date;
+  private LocalDate date;
 
   @NotBlank(message = "City is required")
   @NotNull(message = "City is required")

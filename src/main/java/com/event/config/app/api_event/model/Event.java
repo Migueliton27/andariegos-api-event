@@ -2,6 +2,7 @@ package com.event.config.app.api_event.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +22,7 @@ public class Event {
 
     private String description;
 
-    private LocalDateTime date;
+    private LocalDate date;
 
     private String city;
 
@@ -44,7 +45,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(Long idEvent, String name, String description, LocalDateTime date, String city, String address,
+    public Event(Long idEvent, String name, String description, LocalDate date, String city, String address,
                  Integer availableSpots, BigDecimal price, String image1, String image2, String image3) {
         this.id = idEvent;
         this.name = name;
@@ -83,11 +84,11 @@ public class Event {
         this.description = description;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

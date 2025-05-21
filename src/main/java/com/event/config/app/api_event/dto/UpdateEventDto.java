@@ -1,6 +1,7 @@
 package com.event.config.app.api_event.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +11,7 @@ import lombok.Data;
 public class UpdateEventDto {
     private String name;
     private String description;
-    private LocalDateTime date;
+    private LocalDate date;
     private String city;
     private String address;
     private Integer availableSpots;
