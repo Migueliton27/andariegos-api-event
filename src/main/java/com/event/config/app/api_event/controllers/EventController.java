@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.event.config.app.api_event.dto.AvailabilityPatternDto;
 import com.event.config.app.api_event.dto.CreateEventDto;
 import com.event.config.app.api_event.dto.UpdateEventDto;
 import com.event.config.app.api_event.exceptions.ResourceNotFoundException;
 import com.event.config.app.api_event.mapper.EventMapper;
 import com.event.config.app.api_event.model.Event;
+import com.event.config.app.api_event.service.AvailabilityPatternService;
 import com.event.config.app.api_event.service.EventService;
 
 import jakarta.validation.Valid;
@@ -29,11 +31,15 @@ import jakarta.validation.Valid;
 public class EventController {
 
     private final EventService service;
+    private final AvailabilityPatternService availabilityPatternService;
     private final EventMapper mapper;
 
-    public EventController(EventService service, EventMapper mapper) {
+    public EventController(EventService service,
+                           AvailabilityPatternService availabilityPatternService,
+                           EventMapper mapper) {
         this.service = service;
         this.mapper = mapper;
+        this.availabilityPatternService = availabilityPatternService;
     }
 
     @GetMapping
@@ -47,13 +53,17 @@ public class EventController {
         if (event == null) {
             throw new ResourceNotFoundException("No event found with the code: " + id);
         }
-        return ResponseEntity.ok().body(event);
+        return ResponseEntity.ok().body(mapper.toDto(event));
     }
 
     @PostMapping
     public ResponseEntity<?> postEvent(@Valid @RequestBody() CreateEventDto eventDto){
         Event event = mapper.toEntity(eventDto);
         Event saved = this.service.saveEvent(event);
+
+        List<AvailabilityPatternDto> timeSlots = eventDto.getTimeSlots();
+        availabilityPatternService.saveSlotsEvent(timeSlots, saved);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
     }
 

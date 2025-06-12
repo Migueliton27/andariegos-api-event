@@ -1,5 +1,6 @@
 package com.event.config.app.api_event.model;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,8 +17,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "attendance")
-
+@Table(name = "Attendance")
 public class Attendance {
     
     @Id
@@ -41,8 +41,34 @@ public class Attendance {
     private Event event;
 
 
+    public LocalDate getBookingTime() {
+        return bookingTime;
+    }
+
+
+    public void setBookingTime(LocalDate bookingTime) {
+        this.bookingTime = bookingTime;
+    }
+
+
+    public LocalDate getBookingDate() {
+        return bookingDate;
+    }
+
+
+    public void setBookingDate(LocalDate bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
+
     @Column(name = "id_user", nullable = false)
     private String userId;
+
+    @Column(name = "booking_time", nullable = false)
+    private LocalDate bookingTime;
+
+    @Column(name = "booking_date", nullable = false)
+    private LocalDate bookingDate;
 
 
     public Event getEvent() {

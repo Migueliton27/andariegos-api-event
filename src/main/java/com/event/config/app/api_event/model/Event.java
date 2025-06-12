@@ -9,8 +9,10 @@ import java.util.Set;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "event")
+@Table(name = "Event")
 public class Event {
 
     @Id
@@ -22,14 +24,14 @@ public class Event {
 
     private String description;
 
-    private LocalDate date;
+    // private LocalDate date;
 
     private String city;
 
     private String address;
 
-    @Column(name = "available_spots")
-    private Integer availableSpots;
+    // @Column(name = "available_spots")
+    // private Integer availableSpots;
 
     private BigDecimal price;
 
@@ -42,18 +44,36 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Attendance> attendances = new HashSet<>();
 
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<EventTime> eventTimes = new HashSet<>();
+
+    public Set<Attendance> getAttendances() {
+        return attendances;
+    }
+
+    public void setAttendances(Set<Attendance> attendances) {
+        this.attendances = attendances;
+    }
+
+    public Set<EventTime> getEventTimes() {
+        return eventTimes;
+    }
+
+    public void setEventTimes(Set<EventTime> eventTimes) {
+        this.eventTimes = eventTimes;
+    }
+
     public Event() {
     }
 
-    public Event(Long idEvent, String name, String description, LocalDate date, String city, String address,
-                 Integer availableSpots, BigDecimal price, String image1, String image2, String image3) {
+    public Event(Long idEvent, String name, String description, String city, String address,
+                  BigDecimal price, String image1, String image2, String image3) {
         this.id = idEvent;
         this.name = name;
         this.description = description;
-        this.date = date;
         this.city = city;
         this.address = address;
-        this.availableSpots = availableSpots;
         this.price = price;
         this.image1 = image1;
         this.image2 = image2;
@@ -84,14 +104,6 @@ public class Event {
         this.description = description;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
     public String getCity() {
         return city;
     }
@@ -106,14 +118,6 @@ public class Event {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public Integer getAvailableSpots() {
-        return availableSpots;
-    }
-
-    public void setAvailableSpots(Integer availableSpots) {
-        this.availableSpots = availableSpots;
     }
 
     public BigDecimal getPrice() {
@@ -148,7 +152,9 @@ public class Event {
         this.image3 = image3;
     }
 
-    
+    public Long getId() {
+        return id;
+    }
 
 
     // Getters y setters

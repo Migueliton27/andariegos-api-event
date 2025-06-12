@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.event.config.app.api_event.model.Event;
 import com.event.config.app.api_event.model.Attendance;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {

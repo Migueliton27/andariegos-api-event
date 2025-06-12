@@ -5,11 +5,13 @@ package com.event.config.app.api_event.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.event.config.app.api_event.model.Event;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,8 +27,9 @@ public class CreateEventDto {
   @NotBlank(message = "Description is required")
   private String description;
 
-  @NotNull(message = "Date is required")
-  private LocalDate date;
+  @NotNull(message = "At least one time slot is required")
+  @Size(min = 1, message = "At least one time slot is required")
+  private List<AvailabilityPatternDto> timeSlots;
 
   @NotBlank(message = "City is required")
   @NotNull(message = "City is required")
@@ -36,8 +39,8 @@ public class CreateEventDto {
   @NotBlank(message = "Address is required")
   private String address;
 
-  @NotNull(message = "availableSpots is required")
-  private Integer availableSpots;
+  // @NotNull(message = "availableSpots is required")
+  // private Integer availableSpots;
   
   @NotNull(message = "Price is required")
   private BigDecimal price;
