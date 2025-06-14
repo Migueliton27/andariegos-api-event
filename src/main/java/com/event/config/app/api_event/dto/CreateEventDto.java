@@ -25,9 +25,6 @@ public class CreateEventDto {
   @NotBlank(message = "Description is required")
   private String description;
 
-  @NotNull(message = "Date is required")
-  private LocalDate date;
-
   @NotBlank(message = "City is required")
   @NotNull(message = "City is required")
   private String city;
@@ -36,8 +33,6 @@ public class CreateEventDto {
   @NotBlank(message = "Address is required")
   private String address;
 
-  @NotNull(message = "availableSpots is required")
-  private Integer availableSpots;
   
   @NotNull(message = "Price is required")
   private BigDecimal price;

@@ -10,7 +10,7 @@ import java.util.Set;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "event")
+@Table(name = "Event")
 public class Event {
 
     @Id
@@ -22,14 +22,10 @@ public class Event {
 
     private String description;
 
-    private LocalDate date;
-
     private String city;
 
     private String address;
 
-    @Column(name = "available_spots")
-    private Integer availableSpots;
 
     private BigDecimal price;
 
@@ -39,21 +35,18 @@ public class Event {
 
     private String image3;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "Event", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Attendance> attendances = new HashSet<>();
 
     public Event() {
     }
 
-    public Event(Long idEvent, String name, String description, LocalDate date, String city, String address,
-                 Integer availableSpots, BigDecimal price, String image1, String image2, String image3) {
+    public Event(Long idEvent, String name, String description, String city, String address, BigDecimal price, String image1, String image2, String image3) {
         this.id = idEvent;
         this.name = name;
         this.description = description;
-        this.date = date;
         this.city = city;
         this.address = address;
-        this.availableSpots = availableSpots;
         this.price = price;
         this.image1 = image1;
         this.image2 = image2;
@@ -84,13 +77,6 @@ public class Event {
         this.description = description;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
 
     public String getCity() {
         return city;
@@ -108,13 +94,6 @@ public class Event {
         this.address = address;
     }
 
-    public Integer getAvailableSpots() {
-        return availableSpots;
-    }
-
-    public void setAvailableSpots(Integer availableSpots) {
-        this.availableSpots = availableSpots;
-    }
 
     public BigDecimal getPrice() {
         return price;

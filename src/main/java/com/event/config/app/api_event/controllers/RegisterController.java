@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.event.config.app.api_event.dto.CreateAttendeeDto;
+import com.event.config.app.api_event.dto.AttendeeDto;
 import com.event.config.app.api_event.dto.CreateEventDto;
 import com.event.config.app.api_event.mapper.EventMapper;
 import com.event.config.app.api_event.model.Event;
@@ -38,8 +38,10 @@ public class RegisterController {
         return ResponseEntity.ok().body(this.service.getEventAttendeesByEventId(id));
     }
 
+
+
     @PostMapping
-    public ResponseEntity<?> addUserToEvent(@Valid @RequestBody() CreateAttendeeDto attendance){
+    public ResponseEntity<?> addUserToEvent(@Valid @RequestBody() AttendeeDto attendance){
         String userId = attendance.getUserId();
         Long eventId = attendance.getEventId();
 

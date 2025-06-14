@@ -45,6 +45,8 @@ public class Attendance {
     private String userId;
 
 
+    
+
     public Event getEvent() {
         return event;
     }

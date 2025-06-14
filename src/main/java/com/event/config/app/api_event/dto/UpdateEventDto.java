@@ -11,10 +11,8 @@ import lombok.Data;
 public class UpdateEventDto {
     private String name;
     private String description;
-    private LocalDate date;
     private String city;
     private String address;
-    private Integer availableSpots;
     private BigDecimal price;
     private String image1;
     private String image2;
