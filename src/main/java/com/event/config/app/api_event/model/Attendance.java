@@ -71,6 +71,8 @@ public class Attendance {
     private LocalDate bookingDate;
 
 
+    
+
     public Event getEvent() {
         return event;
     }
