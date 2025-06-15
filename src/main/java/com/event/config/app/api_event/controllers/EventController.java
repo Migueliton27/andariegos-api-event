@@ -57,13 +57,8 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<?> postEvent(@Valid @RequestBody() CreateEventDto eventDto){
-        Event event = mapper.toEntity(eventDto);
-        Event saved = this.service.saveEvent(event);
-
-        List<AvailabilityPatternDto> timeSlots = eventDto.getTimeSlots();
-        availabilityPatternService.saveSlotsEvent(timeSlots, saved);
-
+    public ResponseEntity<?> postEvent(@Valid @RequestBody CreateEventDto eventDto) {
+        Event saved = service.createEvent(eventDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
     }
 
