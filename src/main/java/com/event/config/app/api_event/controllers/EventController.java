@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,13 +59,8 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<?> postEvent(@Valid @RequestBody() CreateEventDto eventDto){
-        Event event = mapper.toEntity(eventDto);
-        Event saved = this.service.saveEvent(event);
-
-        List<AvailabilityPatternDto> timeSlots = eventDto.getTimeSlots();
-        availabilityPatternService.saveSlotsEvent(timeSlots, saved);
-
+    public ResponseEntity<?> postEvent(@Valid @RequestBody CreateEventDto eventDto) {
+        Event saved = service.createEvent(eventDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
     }
 
@@ -83,5 +80,19 @@ public class EventController {
         Event updated = service.saveEvent(existing);
 
         return ResponseEntity.ok(mapper.toDto(updated));
+    }
+
+    private static final Logger log = LoggerFactory.getLogger(EventController.class);
+
+
+    @GetMapping("name/{eventId}")
+    public ResponseEntity<String> getEventName(@PathVariable Long eventId) {
+        log.info("esto es un string");
+        log.info(service.getEventNameById(eventId).getClass().getName());
+        String eventName = service.getEventNameById(eventId);
+        if (eventName == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(eventName);
     }
 }
