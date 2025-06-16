@@ -43,7 +43,7 @@ public class TourService {
 
         List<EventTourDto> events = eventRepository.findByIdIn(eventsIds)
                                               .stream()
-                                              .map(event -> new EventTourDto(event.getIdEvent(), event.getName()))
+                                              .map(event -> new EventTourDto(event.getIdEvent(), event.getName(), event.getDescription(), event.getImage1(), event.getAddress(), event.getPrice()))
                                               .collect(Collectors.toList());
 
         log.info("MY events tour: {} (total: {})", events, events.size());
@@ -64,7 +64,7 @@ public class TourService {
 
             List<EventTourDto> events = eventRepository.findByIdIn(eventsIds)
                                                   .stream()
-                                                  .map(event -> new EventTourDto(event.getIdEvent(), event.getName()))
+                                                  .map(event -> new EventTourDto(event.getIdEvent(), event.getName(), event.getDescription(), event.getImage1(), event.getAddress(), event.getPrice()))
                                                   .collect(Collectors.toList());
 
             TourDto tourDTO = TourMapper.INSTANCE.toDTO(tour);
