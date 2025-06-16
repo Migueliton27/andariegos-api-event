@@ -16,6 +16,17 @@ public class PlanTour {
     @Column(nullable = false)
     private Integer idEvent;
 
+
+    // Default constructor
+    public PlanTour() {
+    }
+
+    // Constructor with idTour and idEvent
+    public PlanTour(Integer idTour, Integer idEvent) {
+        this.idTour = idTour;
+        this.idEvent = idEvent;
+    }
+
     // Getters and Setters
     public Integer getIdPlan() {
         return idPlan;

@@ -1,6 +1,6 @@
 package com.event.config.app.api_event.dto;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,9 +28,9 @@ public class AttendeeDto {
     private String idUser;
 
     @NotNull(message = "bookingTime cannot be null")
-    private LocalTime bookingTime;
+    private LocalDate bookingTime;
 
 
     @NotNull(message = "bookingDate cannot be null")
-    private LocalTime bookingDate;
+    private LocalDate bookingDate;
 }

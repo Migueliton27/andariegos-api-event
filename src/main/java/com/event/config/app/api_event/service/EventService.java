@@ -50,4 +50,9 @@ public class EventService {
 
         return saved;
     }
+
+
+    public String getEventNameById(Long id){
+        return eventRepository.getNameById(id);
+    }
 }

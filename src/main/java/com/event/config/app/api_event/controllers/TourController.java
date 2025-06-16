@@ -39,23 +39,18 @@ public class TourController {
         }
     }
 
-    @PostMapping
+     @PostMapping
     public TourDto createTour(@Valid @RequestBody TourDto tourDTO) {
         Tour tour = TourMapper.INSTANCE.toEntity(tourDTO);
-        Tour savedTour = tourService.saveTour(tour);
+        Tour savedTour = tourService.saveTour(tour, tourDTO.getEventsIds());
         return TourMapper.INSTANCE.toDTO(savedTour);
     }
 
     @PutMapping("/{id}")
     public TourDto updateTour(@PathVariable Integer id, @Valid @RequestBody TourDto tourDTO) {
-        Tour tour = tourService.getTourById(id);
-        if (tour != null) {
-            Tour updatedTour = TourMapper.INSTANCE.toEntity(tourDTO);
-            updatedTour.setIdTour(id);
-            return TourMapper.INSTANCE.toDTO(tourService.saveTour(updatedTour));
-        } else {
-            throw new RuntimeException("Tour not found");
-        }
+        Tour tour = TourMapper.INSTANCE.toEntity(tourDTO);
+        Tour updatedTour = tourService.updateTour(id, tour, tourDTO.getEventsIds());
+        return TourMapper.INSTANCE.toDTO(updatedTour);
     }
 
     @DeleteMapping("/{id}")
