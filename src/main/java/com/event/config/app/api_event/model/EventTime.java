@@ -3,6 +3,7 @@ package com.event.config.app.api_event.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,7 +26,7 @@ public class EventTime {
     @JoinColumn(name = "id_event", nullable = false)
     private Event event;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_pattern", nullable = false)
     private AvailabilityPattern availabilityPattern;
         
