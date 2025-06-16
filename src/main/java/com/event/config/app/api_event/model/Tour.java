@@ -1,5 +1,9 @@
 package com.event.config.app.api_event.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +21,10 @@ public class Tour {
 
     @Column(nullable = false)
     private String description;
+
+    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<PlanTour> planTours;
 
     // Getters and Setters
     public Integer getIdTour() {
@@ -49,5 +57,13 @@ public class Tour {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<PlanTour> getPlanTours() {
+        return planTours;
+    }
+
+    public void setPlanTours(List<PlanTour> planTours) {
+        this.planTours = planTours;
     }
 }

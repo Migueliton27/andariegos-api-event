@@ -1,6 +1,7 @@
 package com.event.config.app.api_event.dto;
 
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.validation.constraints.NotBlank;
@@ -25,7 +26,9 @@ public class TourDto {
     @NotBlank(message = "description cannot be blank")
     private String description;
 
-    private Set<Integer> eventsIds;
+    private List<Long> eventsIds;
+
+    private List<EventTourDto> events;
 
     // Getters and Setters
     public Integer getIdTour() {
@@ -61,13 +64,21 @@ public class TourDto {
     }
 
     
-    public Set<Integer> getEventIds() {
+    public List<Long> getEventIds() {
         return eventsIds;
     }
 
-    public void setEventids(Set<Integer> eventIds) {
+    public void setEventids(List<Long> eventIds) {
         this.eventsIds = eventIds;
     }
 
+
+    public List<EventTourDto> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<EventTourDto> events) {
+        this.events = events;
+    }
 
 }

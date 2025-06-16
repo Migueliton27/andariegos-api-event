@@ -10,21 +10,28 @@ public class PlanTour {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPlan;
 
-    @Column(nullable = false)
-    private Integer idTour;
 
-    @Column(nullable = false)
-    private Integer idEvent;
+    @ManyToOne
+    @JoinColumn(name = "id_tour", nullable = false)
+    private Tour tour;
+
+
+
+    @ManyToOne
+    @JoinColumn(name = "id_event", nullable =  false)
+    private Event event;
 
 
     // Default constructor
     public PlanTour() {
     }
 
-    // Constructor with idTour and idEvent
-    public PlanTour(Integer idTour, Integer idEvent) {
-        this.idTour = idTour;
-        this.idEvent = idEvent;
+    public PlanTour(Integer idTour, Long idEvent) {
+        this.tour = new Tour(); // Tour vacío, solo con ID
+        this.tour.setIdTour(idTour);
+
+        this.event = new Event(); // Event vacío, solo con ID
+        this.event.setIdEvent(idEvent);
     }
 
     // Getters and Setters
@@ -36,19 +43,43 @@ public class PlanTour {
         this.idPlan = idPlan;
     }
 
-    public Integer getIdTour() {
-        return idTour;
+
+
+    public void setTourId(Integer idTour) {
+        if (this.tour == null) {
+            this.tour = new Tour();
+        }
+        this.tour.setIdTour(idTour);
     }
 
-    public void setIdTour(Integer idTour) {
-        this.idTour = idTour;
+    public void setEventId(Long idEvent) {
+        if (this.event == null) {
+            this.event = new Event();
+        }
+        this.event.setIdEvent(idEvent);
+    }
+    public Integer getTourId() {
+        return tour != null ? tour.getIdTour() : null;
     }
 
-    public Integer getIdEvent() {
-        return idEvent;
+    public Long getEventId() {
+        return event != null ? event.getIdEvent() : null;
     }
 
-    public void setIdEvent(Integer idEvent) {
-        this.idEvent = idEvent;
+    public Tour getTour() {
+        return tour;
     }
+
+    public void setTour(Tour tour) {
+        this.tour = tour;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
 }
