@@ -8,6 +8,8 @@ import com.event.config.app.api_event.service.TourService;
 
 import jakarta.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/tours")
 public class TourController {
+    private static final Logger log = LoggerFactory.getLogger(TourController.class);
     private final TourService tourService;
 
     public TourController(TourService tourService) {
@@ -24,16 +27,17 @@ public class TourController {
     }
 
     @GetMapping
-    public List<TourDto> getAllTours() {
-        List<Tour> tours = tourService.getAllTours();
-        return tours.stream().map(TourMapper.INSTANCE::toDTO).collect(Collectors.toList());
+    public ResponseEntity<List<TourDto>> getAllTours() {
+        List<TourDto> tours = tourService.getAllTours();
+        return ResponseEntity.ok(tours);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TourDto> getTourById(@PathVariable Integer id) {
-        Tour tour = tourService.getTourById(id);
+        log.info("HOLAAA");
+        TourDto tour = tourService.getTourById(id);
         if (tour != null) {
-            return ResponseEntity.ok(TourMapper.INSTANCE.toDTO(tour));
+            return ResponseEntity.ok(tour);
         } else {
             return ResponseEntity.notFound().build();
         }
