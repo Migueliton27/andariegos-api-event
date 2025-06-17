@@ -29,6 +29,7 @@ public class CreateEventDto {
 
   @NotNull(message = "At least one time slot is required")
   @Size(min = 1, message = "At least one time slot is required")
+  @Size(max = 7, message = "A maximum of 7 time slots is allowed")
   private List<AvailabilityPatternDto> timeSlots;
 
   @NotBlank(message = "City is required")

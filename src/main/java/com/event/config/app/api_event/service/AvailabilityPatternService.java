@@ -1,10 +1,13 @@
 package com.event.config.app.api_event.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.event.config.app.api_event.dto.AvailabilityPatternDto;
+import com.event.config.app.api_event.dto.UpdateAvailabilityPattern;
 import com.event.config.app.api_event.mapper.AvailabilityPatternMapper;
 import com.event.config.app.api_event.model.AvailabilityPattern;
 import com.event.config.app.api_event.model.Event;
@@ -40,5 +43,44 @@ public class AvailabilityPatternService {
         }
 
         return;
+    }
+
+    public void updateSlotsEvent(List<UpdateAvailabilityPattern> timeSlots, Event event) {
+        Map<Long, EventTime> existingSlots = event.getEventTimes().stream()
+            .collect(Collectors.toMap(et -> et.getAvailabilityPattern().getId(), et -> et));
+        
+        for (UpdateAvailabilityPattern slotDto : timeSlots) {
+            if (slotDto.isToDelete() && slotDto.getId() != null) {
+                // Eliminar slot existente
+                System.out.println("Eliminando slot con ID: " + slotDto.getId());
+                EventTime eventTime = existingSlots.get(slotDto.getId());
+                if (eventTime != null) {
+                    event.getEventTimes().remove(eventTime);
+                    eventTimeRepository.delete(eventTime);
+                    availabilityPatternRepository.delete(eventTime.getAvailabilityPattern());
+                }
+            } else if (slotDto.getId() != null) {
+                EventTime eventTime = existingSlots.get(slotDto.getId());
+                if (eventTime != null) {
+                    AvailabilityPattern pattern = eventTime.getAvailabilityPattern();
+                    pattern.setDayOfWeek(slotDto.getDayOfWeek());
+                    pattern.setStartTime(slotDto.getStartTime());
+                    pattern.setEndTime(slotDto.getEndTime());
+                    availabilityPatternRepository.save(pattern);
+                }
+            } else {
+                
+                // Crear nuevo slot
+                AvailabilityPattern pattern = new AvailabilityPattern();
+                pattern.setDayOfWeek(slotDto.getDayOfWeek());
+                pattern.setStartTime(slotDto.getStartTime());
+                pattern.setEndTime(slotDto.getEndTime());
+                AvailabilityPattern savedPattern = availabilityPatternRepository.save(pattern);
+                
+                EventTime newEventTime = new EventTime(event, savedPattern);
+                eventTimeRepository.save(newEventTime);
+                event.getEventTimes().add(newEventTime);
+            }
+        }
     }
 }

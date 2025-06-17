@@ -3,11 +3,11 @@ package com.event.config.app.api_event.controllers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.event.config.app.api_event.dto.AvailabilityPatternDto;
 import com.event.config.app.api_event.dto.CreateEventDto;
+import com.event.config.app.api_event.dto.EventResponseDto;
+import com.event.config.app.api_event.dto.UpdateAvailabilityPattern;
 import com.event.config.app.api_event.dto.UpdateEventDto;
 import com.event.config.app.api_event.exceptions.ResourceNotFoundException;
 import com.event.config.app.api_event.mapper.EventMapper;
@@ -47,7 +49,11 @@ public class EventController {
 
     @GetMapping
     private ResponseEntity<List<?>> getAllEvents(){
-        return ResponseEntity.ok().body(this.service.getAllEvents());
+        List<Event> events = this.service.getAllEvents();
+        List<EventResponseDto> eventDtos = events.stream()
+                                        .map(mapper::toDto)
+                                        .collect(Collectors.toList());
+        return ResponseEntity.ok().body(eventDtos);
     }
 
     @GetMapping("/{id}")
@@ -60,10 +66,17 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<?> postEvent(@Valid @RequestBody CreateEventDto eventDto) {
-        Event saved = service.createEvent(eventDto);
+    public ResponseEntity<?> postEvent(@Valid @RequestBody() CreateEventDto eventDto){
+        Event event = mapper.toEntity(eventDto);
+        Event saved = this.service.saveEvent(event);
+
+        List<AvailabilityPatternDto> timeSlots = eventDto.getTimeSlots();
+        availabilityPatternService.saveSlotsEvent(timeSlots, saved);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
     }
+
+    
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateEvent(
@@ -75,30 +88,26 @@ public class EventController {
         if (existing == null) {
             throw new ResourceNotFoundException("No event found with the code: " + id);
         }
-
+        
         mapper.updateEntity(existing, dto);
-
         Event updated = service.saveEvent(existing);
+        
+        List<UpdateAvailabilityPattern> timeSlots = dto.getTimeSlots();
+        System.out.println("Time Slots: " + timeSlots);
+        if (!CollectionUtils.isEmpty(timeSlots)) {
+            availabilityPatternService.updateSlotsEvent(timeSlots, updated);
+        }
 
         return ResponseEntity.ok(mapper.toDto(updated));
     }
 
-    private static final Logger log = LoggerFactory.getLogger(EventController.class);
-
-
-    @GetMapping("name/{eventId}")
-    public ResponseEntity<String> getEventName(@PathVariable Long eventId) {
-        log.info("esto es un string");
-        log.info(service.getEventNameById(eventId).getClass().getName());
-        String eventName = service.getEventNameById(eventId);
-        if (eventName == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(eventName);
-    }
-
     @DeleteMapping("/{id}")
-    public void deleteEvent(@PathVariable Long id) {
-        service.deleteEvent(id);;
+    public ResponseEntity<?> deleteEvent(@PathVariable Long id) throws ResourceNotFoundException {
+        Event existing = this.service.getEventById(id);
+        if (existing == null) {
+            throw new ResourceNotFoundException("No event found with the code: " + id);
+        }
+        this.service.deleteEvent(id);
+        return ResponseEntity.noContent().build();
     }
 }

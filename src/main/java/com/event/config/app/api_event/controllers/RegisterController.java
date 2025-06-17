@@ -1,5 +1,7 @@
 package com.event.config.app.api_event.controllers;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -41,10 +43,15 @@ public class RegisterController {
     public ResponseEntity<?> addUserToEvent(@Valid @RequestBody() CreateAttendeeDto attendance){
         String userId = attendance.getUserId();
         Long eventId = attendance.getEventId();
+        LocalTime bookingTime = attendance.getBooking_time() != null ? attendance.getBooking_time() : null;
+        LocalDate bookingDate = attendance.getBooking_date() != null ? attendance.getBooking_date() : null;
+
 
         Attendance newAttendance = service.addUserToEvent(
             eventId,
-            userId
+            userId,
+            bookingTime,
+            bookingDate
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newAttendance);
