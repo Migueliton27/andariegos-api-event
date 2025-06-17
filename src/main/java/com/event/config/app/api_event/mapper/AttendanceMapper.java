@@ -1,6 +1,7 @@
 package com.event.config.app.api_event.mapper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,7 +17,17 @@ public interface AttendanceMapper {
     AttendeeDto toDto(Attendance attendance);
 
     // Mapea listas
-    List<AttendeeDto> toDtoList(List<Attendance> attendanceList);
+     public static List<AttendeeDto> toDtoList(List<Attendance> attendanceList) {
+        return attendanceList.stream().map(att -> {
+            return new AttendeeDto(
+                att.getId(),
+                att.getEvent() != null ? att.getEvent().getId() : null,
+                att.getUserId(),
+                att.getBookingTime(),
+                att.getBookingDate()
+            );
+        }).collect(Collectors.toList());
+    }
 }
 
 

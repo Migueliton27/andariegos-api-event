@@ -1,8 +1,11 @@
 package com.event.config.app.api_event.model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,15 +41,16 @@ public class Attendance {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_event", nullable = false)
+    @JsonBackReference
     private Event event;
 
 
-    public LocalDate getBookingTime() {
+    public LocalTime getBookingTime() {
         return bookingTime;
     }
 
 
-    public void setBookingTime(LocalDate bookingTime) {
+    public void setBookingTime(LocalTime bookingTime) {
         this.bookingTime = bookingTime;
     }
 
@@ -65,7 +69,7 @@ public class Attendance {
     private String userId;
 
     @Column(name = "booking_time", nullable = false)
-    private LocalDate bookingTime;
+    private LocalTime bookingTime;
 
     @Column(name = "booking_date", nullable = false)
     private LocalDate bookingDate;

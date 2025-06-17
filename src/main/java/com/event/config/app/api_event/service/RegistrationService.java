@@ -1,5 +1,7 @@
 package com.event.config.app.api_event.service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -33,12 +35,16 @@ public class RegistrationService {
     @Transactional
     public List<AttendeeDto> getEventAttendeesByEventId(Long id) {
         List<Attendance> list = attendanceRepository.findByEventId(id);
+        System.out.println("List of attendees: " + list);
+        for (Attendance attendance : list) {
+            System.out.println("Attendee: " + attendance.getUserId() + ", Event ID: " + attendance.getEvent().getId());
+        }
         
-        return mapper.toDtoList(list);
+        return AttendanceMapper.toDtoList(list);
     }
 
     @Transactional
-    public Attendance addUserToEvent(Long eventId, String userId) {
+    public Attendance addUserToEvent(Long eventId, String userId, LocalTime bookingTime, LocalDate bookingDate) {
 
         if (attendanceRepository.existsByUserIdAndEventId(userId, eventId)) 
             throw new ResourceNotFoundException("The user is already registered in the event");
@@ -47,8 +53,11 @@ public class RegistrationService {
                      .orElseThrow(() -> new ResourceNotFoundException("The event doesn´t exist with the eventId: "+eventId));
 
         Attendance attendee = new Attendance();
+    
         attendee.setEvent(event);
         attendee.setUserId(userId);
+        attendee.setBookingTime(bookingTime);
+        attendee.setBookingDate(bookingDate);
 
         return attendanceRepository.save(attendee);
     }
