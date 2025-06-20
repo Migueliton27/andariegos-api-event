@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
@@ -27,6 +29,7 @@ import com.event.config.app.api_event.mapper.EventMapper;
 import com.event.config.app.api_event.model.Event;
 import com.event.config.app.api_event.service.AvailabilityPatternService;
 import com.event.config.app.api_event.service.EventService;
+import com.event.config.app.api_event.service.PublisherEventQueue;
 
 import jakarta.validation.Valid;
 
@@ -35,16 +38,20 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/events")
 public class EventController {
 
+    private static final Logger log = LoggerFactory.getLogger(EventController.class);
+
     private final EventService service;
     private final AvailabilityPatternService availabilityPatternService;
     private final EventMapper mapper;
+    private final PublisherEventQueue publisher;
 
     public EventController(EventService service,
                            AvailabilityPatternService availabilityPatternService,
-                           EventMapper mapper) {
+                           EventMapper mapper, PublisherEventQueue publisher) {
         this.service = service;
         this.mapper = mapper;
         this.availabilityPatternService = availabilityPatternService;
+        this.publisher = publisher;
     }
 
     @GetMapping
@@ -108,6 +115,8 @@ public class EventController {
             throw new ResourceNotFoundException("No event found with the code: " + id);
         }
         this.service.deleteEvent(id);
+        log.info("enviando: {}", id);
+        publisher.send(id);
         return ResponseEntity.noContent().build();
     }
 }
