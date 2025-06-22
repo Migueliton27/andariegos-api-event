@@ -108,6 +108,17 @@ public class EventController {
         return ResponseEntity.ok(mapper.toDto(updated));
     }
 
+    @GetMapping("name/{eventId}")
+    public ResponseEntity<String> getEventName(@PathVariable Long eventId) {
+        log.info("esto es un string");
+        log.info(service.getEventNameById(eventId).getClass().getName());
+        String eventName = service.getEventNameById(eventId);
+        if (eventName == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(eventName);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long id) throws ResourceNotFoundException {
         Event existing = this.service.getEventById(id);
