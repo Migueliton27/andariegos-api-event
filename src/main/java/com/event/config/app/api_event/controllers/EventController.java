@@ -56,12 +56,20 @@ public class EventController {
 
     @GetMapping
     private ResponseEntity<List<?>> getAllEvents(){
+        log.info("entrando a get ALL EVENTS");
         List<Event> events = this.service.getAllEvents();
         List<EventResponseDto> eventDtos = events.stream()
                                         .map(mapper::toDto)
                                         .collect(Collectors.toList());
         return ResponseEntity.ok().body(eventDtos);
     }
+
+    // @GetMapping
+    // public ResponseEntity<List<?>> getAllEvents() throws InterruptedException {
+    //     log.info("Simulando cuelgue total del servicio...");
+    //     Thread.sleep(10_000);
+    //     return ResponseEntity.ok(List.of());
+    // }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getEvent(@PathVariable Long id) throws ResourceNotFoundException {
