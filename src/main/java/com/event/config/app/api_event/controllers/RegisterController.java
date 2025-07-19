@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.event.config.app.api_event.dto.CreateAttendeeDto;
+import com.event.config.app.api_event.exceptions.ResourceNotFoundException;
 import com.event.config.app.api_event.mapper.EventMapper;
 import com.event.config.app.api_event.model.Attendance;
 import com.event.config.app.api_event.service.RegistrationService;
@@ -55,5 +57,15 @@ public class RegisterController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newAttendance);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAttendance(@PathVariable("id") Long id) {
+        Attendance existing = service.FindByAttendanceId(id);
+        if (existing == null) {
+            throw new ResourceNotFoundException("No attendance found with the code: " + id);
+        }
+        service.deleteUserEvent(id);
+        return ResponseEntity.ok("Asistencia eliminada con éxito.");
     }
 }

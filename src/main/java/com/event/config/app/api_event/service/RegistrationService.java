@@ -66,4 +66,9 @@ public class RegistrationService {
     public void deleteUserEvent(Long id) {
         attendanceRepository.deleteById(id);
     }
+
+    public Attendance FindByAttendanceId(Long id){
+        return attendanceRepository.findById(id).orElse(null);
+    }
+
 }
