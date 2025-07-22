@@ -67,6 +67,15 @@ public class RegistrationService {
         attendanceRepository.deleteById(id);
     }
 
+     public void deleteAttendeeUserEvent(String id_user, Long id_event) {
+        attendanceRepository.deleteByUserIdAndIdEventId(id_user, id_event);
+    }
+
+
+    public Attendance FindByAttendeUserEvent(String id_user, Long id_event){
+        return attendanceRepository.findByUserIdAndEventId(id_user, id_event);
+    }
+
     public Attendance FindByAttendanceId(Long id){
         return attendanceRepository.findById(id).orElse(null);
     }
